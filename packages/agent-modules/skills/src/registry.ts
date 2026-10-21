@@ -2,7 +2,7 @@ import { constants as fsConstants, promises as fs, readdirSync, statSync } from 
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import { subscribeToSkillDirectory } from './directory-watcher.js';
 
 import type {

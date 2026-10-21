@@ -10,7 +10,7 @@ type GuardEventSource = Pick<EventEmitter, 'on' | 'off'>;
 export interface TuiProcessLike extends GuardEventSource {
   readonly stdout: GuardEventSource;
   readonly stderr: GuardEventSource;
-  exitCode?: string | number;
+  exitCode?: string | number | null;
 }
 
 export interface TuiProcessGuardOptions {

@@ -12,22 +12,22 @@
     }
   },
   "dependencies": {
-    "@mavis/session-report": "workspace:^",
     "@mavis/agent-runtime": "workspace:^",
     "@mavis/context-manager": "workspace:^",
     "@mavis/permission": "workspace:^",
     "@mavis/runaway-guard": "workspace:^",
+    "@mavis/session-report": "workspace:^",
     "@mavis/skills": "workspace:^",
     "@mavis/system-reminder": "workspace:^",
-    "@sinclair/typebox": "^0.34.0"
+    "@sinclair/typebox": "^0.34.52"
   },
   "devDependencies": {
     "@earendil-works/pi-agent-core": "workspace:*",
     "@earendil-works/pi-ai": "workspace:*",
     "@mavis/protocol": "workspace:^",
-    "@types/node": "^20",
-    "typescript": "^5",
-    "vitest": "^2"
+    "@types/node": "^26.6.5",
+    "typescript": "5.9.3",
+    "vitest": "5.0.5"
   },
   "license": "MIT"
 }

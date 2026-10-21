@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 import { prepareConfigFileForRead, resolveConfigFromRaw, type Config } from './config.js';
 

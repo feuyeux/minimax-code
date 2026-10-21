@@ -473,14 +473,15 @@ function nativeProcessPort(): RunnerProcess {
       return this;
     },
     send(message, callback) {
-      if (!process.send) {
+      const send = process.send;
+      if (!send) {
         callback?.(new Error('Runner IPC channel is unavailable'));
         return false;
       }
-      return callback ? process.send(message, callback) : process.send(message);
+      return callback ? send(message, callback) : send(message);
     },
     disconnect() {
-      if (process.connected) process.disconnect();
+      if (process.connected) process.disconnect?.();
     },
   };
 }

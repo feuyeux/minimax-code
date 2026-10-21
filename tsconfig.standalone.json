@@ -2,7 +2,6 @@
   "extends": "./tsconfig.node.json",
   "compilerOptions": {
     "noEmit": true,
-    "baseUrl": ".",
     "paths": {
       "@earendil-works/pi-agent-core": [
         "./third_party/pi-mono/packages/agent/src/index.ts"

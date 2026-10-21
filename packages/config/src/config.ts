@@ -9,7 +9,7 @@ import path from "node:path";
 import os from "node:os";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import { parseTuiConfig, type TuiConfig } from "./tui-config.js";
 import {
   applyManagedMinimaxContextLimits,

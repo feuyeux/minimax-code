@@ -190,7 +190,7 @@ export class TelegramSender {
       form.set('chat_id', chatId);
       const threadId = toMessageThreadId(messageThreadId);
       if (threadId !== undefined) form.set('message_thread_id', String(threadId));
-      form.set(field, new Blob([buffer]), fileName);
+      form.set(field, new Blob([buffer as unknown as BlobPart]), fileName);
       if (ref.caption) form.set('caption', ref.caption);
       const response = await this.fetcher(this.endpoint(method), {
         method: 'POST',

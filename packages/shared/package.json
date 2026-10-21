@@ -327,14 +327,14 @@
     }
   },
   "dependencies": {
-    "pino": "^10",
-    "pino-pretty": "^11"
+    "pino": "^10.4.0",
+    "pino-pretty": "^13.2.0"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@vitest/coverage-v8": "^2",
-    "typescript": "^5",
-    "vitest": "^2"
+    "@types/node": "^26.6.5",
+    "@vitest/coverage-v8": "5.0.5",
+    "typescript": "5.9.3",
+    "vitest": "5.0.5"
   },
   "private": true,
   "license": "MIT"

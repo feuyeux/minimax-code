@@ -437,7 +437,7 @@ export class FeishuSender {
         if (spec.endpoint === 'files') form.set('file_name', uploadFileName);
         form.set(
           spec.endpoint === 'images' ? 'image' : 'file',
-          new Blob([buffer], { type: uploadMimeType }),
+          new Blob([buffer as unknown as BlobPart], { type: uploadMimeType }),
           uploadFileName,
         );
         const response = await this.fetcher(`${FEISHU_API_BASE}/im/v1/${spec.endpoint}`, {

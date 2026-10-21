@@ -11,10 +11,10 @@
     }
   },
   "devDependencies": {
-    "@types/js-yaml": "^4",
-    "@types/node": "^20",
-    "typescript": "^5",
-    "vitest": "^2"
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^26.6.5",
+    "typescript": "5.9.3",
+    "vitest": "5.0.5"
   },
   "dependencies": {
     "js-yaml": "^4"

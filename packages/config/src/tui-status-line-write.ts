@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { promises as fs } from 'node:fs';
 import { dirname, join } from 'node:path';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import lockfile from 'proper-lockfile';
 
 /** Update only the profile's presentation setting, under the same lock as model writes. */

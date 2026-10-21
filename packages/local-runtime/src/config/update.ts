@@ -2,7 +2,7 @@ import { randomBytes } from 'node:crypto';
 import fs from 'node:fs';
 import { dirname, join } from 'node:path';
 import { getConfig, getConfigPath, minimaxApiModels, resetConfig } from '@mavis/config';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import lockfile from 'proper-lockfile';
 
 import type { LocalRuntimeConfig } from './types.js';

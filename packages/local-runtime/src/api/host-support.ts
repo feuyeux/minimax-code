@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import { classifyLLMErrorToCode } from "@mavis/agent-core/event-bridge";
 import {
   allowsManagedMinimaxProviderOverride,

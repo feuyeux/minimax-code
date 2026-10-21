@@ -11,15 +11,15 @@
     }
   },
   "dependencies": {
-    "@mavis/agent-core": "workspace:^",
-    "@sinclair/typebox": "^0.34.0",
     "@earendil-works/pi-agent-core": "workspace:*",
+    "@mavis/agent-core": "workspace:^",
+    "@sinclair/typebox": "^0.34.52",
     "zod": "^3"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "typescript": "^5",
-    "vitest": "^2"
+    "@types/node": "^26.6.5",
+    "typescript": "5.9.3",
+    "vitest": "5.0.5"
   },
   "private": true,
   "license": "MIT"

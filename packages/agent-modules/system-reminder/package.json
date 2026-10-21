@@ -12,10 +12,10 @@
   },
   "devDependencies": {
     "@mavis/config": "workspace:^",
-    "@types/node": "^20",
-    "typescript": "^5",
-    "vitest": "^2",
-    "@mavis/shared": "workspace:^"
+    "@mavis/shared": "workspace:^",
+    "@types/node": "^26.6.5",
+    "typescript": "5.9.3",
+    "vitest": "5.0.5"
   },
   "private": true,
   "license": "MIT"

@@ -28,13 +28,13 @@
   "dependencies": {
     "@mavis/shared": "workspace:^",
     "js-yaml": "^4",
-    "proper-lockfile": "^4"
+    "proper-lockfile": "^4.1.2"
   },
   "devDependencies": {
-    "@types/js-yaml": "^4",
-    "@types/node": "^20",
-    "@types/proper-lockfile": "^4",
-    "typescript": "^5"
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^26.6.5",
+    "@types/proper-lockfile": "^4.1.4",
+    "typescript": "5.9.3"
   },
   "private": true,
   "license": "MIT"

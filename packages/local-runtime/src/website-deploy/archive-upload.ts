@@ -29,7 +29,7 @@ export interface WebsiteDeployGateway {
   ): Promise<Record<string, unknown>>;
   putBytes(
     url: string,
-    body: RequestInit['body'],
+    body: RequestInit['body'] | Uint8Array,
     headers: Record<string, string>,
     signal?: AbortSignal,
     timeoutMs?: number,

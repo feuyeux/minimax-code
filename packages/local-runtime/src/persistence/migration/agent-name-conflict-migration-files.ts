@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 import { buildLocalChannelBindingKey } from '../../channels/channel-inbound-utils.js';
 import type { DatabaseLike } from '../db.js';

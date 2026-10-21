@@ -2,7 +2,7 @@ import { access, readdir, readFile, stat } from 'node:fs/promises';
 import { dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getRuntimeRegion } from '@mavis/config';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import { renderLocalSkillsCatalog } from './catalog.js';
 
 const SKILL_FILE = 'SKILL.md';

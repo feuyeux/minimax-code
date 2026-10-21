@@ -9,7 +9,7 @@ import { MINIMAX_MODELS } from './minimax-model-catalog.js';
 import { createHash, randomUUID } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import { restrictConfigFileSync, writePrivateConfigFileSync } from './private-config-file.js';
 
 import type {

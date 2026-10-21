@@ -1,6 +1,6 @@
 import { chmod, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 import type { LocalChannelContext } from './infra.js';
 import { json, readFirstString, readJsonBody } from '../api/http-helpers.js';

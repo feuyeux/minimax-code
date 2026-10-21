@@ -1,6 +1,6 @@
 import { chmod, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { basename as pathBasename, dirname, join } from 'node:path';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 import { json, readFirstString, readJsonBody } from '../api/http-helpers.js';
 import { imLogger as logger } from '../common/im-logger.js';

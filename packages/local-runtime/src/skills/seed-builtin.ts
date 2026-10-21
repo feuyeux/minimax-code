@@ -10,7 +10,7 @@ import {
   type RmOptions,
 } from 'node:fs';
 import { join } from 'node:path';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 import { logger } from '../common/logger.js';
 import { combinedSeedFingerprint, fingerprintSkillDir } from './seed-fingerprint.js';

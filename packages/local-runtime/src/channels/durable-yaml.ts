@@ -3,7 +3,7 @@ import { basename, dirname, join } from 'node:path';
 import { randomBytes } from 'node:crypto';
 
 import { KeyedOperationLane } from '@mavis/shared/keyed-operation-lane';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 const mutationLane = new KeyedOperationLane<string>();
 

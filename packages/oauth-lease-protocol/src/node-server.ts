@@ -65,7 +65,7 @@ export async function startNodeAuthLeaseServer(
     socket.on('data', (chunk) => {
       let frames: unknown[];
       try {
-        frames = decoder.push(chunk);
+        frames = decoder.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
       } catch {
         socket.destroy();
         return;

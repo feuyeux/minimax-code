@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 import { imLogger } from '../common/im-logger.js';
 import type { LocalRuntimeLogger } from '../common/logger.js';

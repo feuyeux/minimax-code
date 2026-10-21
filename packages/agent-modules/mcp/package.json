@@ -31,14 +31,14 @@
     }
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.30.0",
-    "proper-lockfile": "^4"
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "proper-lockfile": "^4.1.2"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "typescript": "^5",
-    "vitest": "^2",
-    "@types/proper-lockfile": "^4"
+    "@types/node": "^26.6.5",
+    "@types/proper-lockfile": "^4.1.4",
+    "typescript": "5.9.3",
+    "vitest": "5.0.5"
   },
   "private": true,
   "license": "MIT"

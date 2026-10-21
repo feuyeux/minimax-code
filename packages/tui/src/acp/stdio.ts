@@ -14,7 +14,7 @@ export interface ServeTuiAcpStdioOptions {
 }
 
 export async function serveTuiAcpStdio(options: ServeTuiAcpStdioOptions): Promise<void> {
-  const stream = acp.ndJsonStream(Writable.toWeb(options.output), Readable.toWeb(options.input));
+  const stream = acp.ndJsonStream(Writable.toWeb(options.output), Readable.toWeb(options.input) as ReadableStream<Uint8Array>);
   const connection = createTuiAcpAgent({
     runtime: options.runtime,
     version: options.version,
