@@ -29,6 +29,60 @@ version by explicitly installing its archive; the built-in updater follows the
 official npm registry channel and does not select GitHub release assets. To remove
 the package, use `npm uninstall --global @minimax-ai/code`. User data remains in place.
 
+## Install the Ubuntu/Debian package
+
+A `.deb` package is available for Ubuntu and Debian on `amd64` and `arm64`. It
+installs the compiled CLI under `/usr/lib/minimax-code`, provides the `mcode`
+command in `/usr/bin`, and includes the runtime JavaScript dependencies. It
+depends on a compatible **system** Node.js runtime; Node.js itself is not bundled.
+
+```bash
+sudo apt install ./minimax-code_0.6.5-1_amd64.deb
+mcode --version
+```
+
+Use `dpkg -i` only after installing the Node.js dependency, or let `apt` resolve
+it. The package pins the Node.js ABI used when it was built: a package built with
+Node.js 24 requires `nodejs (>= 24.2)` and `< 25`, a package built with Node.js 22
+requires `nodejs (>= 22.19)` and `< 23`, and so on. Install the matching Node.js
+line from your distribution or [NodeSource](https://github.com/nodesource/distributions)
+first. Ubuntu 24.04's default `nodejs` 18 does not satisfy the dependency. If no
+package matches your Node.js line or architecture, use the npm archive or a source
+build instead.
+
+The package layout is:
+
+| Path | Contents |
+| --- | --- |
+| `/usr/bin/mcode` | Symlink to the CLI entry point |
+| `/usr/lib/minimax-code` | Compiled CLI, runtime assets and `node_modules` |
+| `/usr/share/doc/minimax-code` | Copyright, changelog and README |
+
+Remove the package with `sudo apt remove minimax-code`. User data in `~/.minimax`
+(or the configured data directory) is left in place; see [Accounts and data](#accounts-and-data).
+A dpkg-installed `mcode` may be shadowed by an npm global installation in
+`/usr/local/bin`; check with `command -v mcode` if the reported version is unexpected.
+
+### Build the package from source
+
+On a Debian or Ubuntu host with `dpkg-deb` (from `dpkg-dev`), Node.js 22.19+ or
+24.2+, pnpm 9.12.0, and access to public npm:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm build
+pnpm package:deb                 # dist/deb/minimax-code_<version>-1_<arch>.deb
+pnpm verify:deb                  # rebuild, then extract and test the package
+```
+
+`pnpm package:deb` requires a clean committed working tree so the package records
+a source revision; pass `--allow-dirty` for a local trial build. The packager
+installs the exact runtime dependency versions into the package, so the resulting
+`.deb` is self-contained apart from Node.js. Packages cannot be cross-built:
+native modules must match the host architecture and Node.js ABI. `pnpm verify
+--profile deb` runs the same build, layout, launcher and native-module checks as
+CI.
+
 ## Install from source
 
 The official CLI is available as [`@minimax-ai/code`](https://www.npmjs.com/package/@minimax-ai/code). Public npm `latest` was 0.6.9 on 2026-10-13. Follow the [official quick start](https://agent.minimax.io/docs/cli/quick-start) or the [README installation steps](../README.md#quick-start) for the macOS / Linux / WSL installer, Windows PowerShell installer, or npm installation.

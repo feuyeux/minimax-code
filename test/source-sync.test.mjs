@@ -771,7 +771,7 @@ test('documentation and archive profiles preserve their required validation gate
   const full = f.run(['--list']).stdout.trim().split('\n');
   const docs = f.run(['--profile', 'docs', '--list']);
   assert.equal(docs.status, 0, docs.stderr);
-  assert.deepEqual(docs.stdout.trim().split('\n'), ['check:source', 'check:tsconfig', 'export source preview', 'test:release-tools']);
+  assert.deepEqual(docs.stdout.trim().split('\n'), ['check:source', 'check:tsconfig', 'export source preview', 'test:release-tools', 'test:deb-tools']);
   const archive = f.run(['--profile', 'archive', '--list']);
   assert.equal(archive.status, 0, archive.stderr);
   assert.deepEqual(archive.stdout.trim().split('\n'), full.filter(g => g !== 'export source preview'));
@@ -780,6 +780,11 @@ test('documentation and archive profiles preserve their required validation gate
     assert.equal(packageProfile.status, 0, packageProfile.stderr);
     assert.equal(packageProfile.stdout.trim(), 'test:release-package');
   } else assert.notEqual(packageProfile.status, 0);
+  const debProfile = f.run(['--profile', 'deb', '--list']);
+  if (process.platform === 'linux') {
+    assert.equal(debProfile.status, 0, debProfile.stderr);
+    assert.deepEqual(debProfile.stdout.trim().split('\n'), ['test:deb-tools', 'build', 'verify:deb']);
+  } else assert.notEqual(debProfile.status, 0);
   const failure = f.run(['--profile', 'docs'], { VERIFY_FIXTURE_FAIL: 'check:source' });
   assert.equal(failure.status, 1);
   assert.equal(f.report().status, 'FAIL');
@@ -1001,6 +1006,7 @@ test('Windows contract profile selects focused gates', () => {
       'check:tsconfig',
       'export source preview',
       'test:release-tools',
+      'test:deb-tools',
       'lint:tui',
       'build',
       'check:standalone',

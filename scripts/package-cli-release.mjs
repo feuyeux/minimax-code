@@ -22,7 +22,7 @@ function resolvePackage(name, importer) {
   return undefined;
 }
 
-function copyLicenses(stage) {
+export function copyLicenses(stage) {
   const licenses = path.join(stage, 'licenses');
   mkdirSync(licenses);
   for (const name of ['LICENSE', 'NOTICE', 'LICENSE-STATUS.md', 'THIRD_PARTY_NOTICES.md']) copyFileSync(path.join(root, name), path.join(stage, name));
@@ -71,21 +71,28 @@ export function releaseManifest(importers, version) {
   };
 }
 
-export async function packageCliRelease({ tag, out }) {
+// Shared by the npm archive and Debian package builders so both distribute the
+// same compiled CLI, dependency manifest, licenses and source receipt.
+export function stageCliRelease({ tag, parent = tmpdir(), requireClean = true, requireRevision = true } = {}) {
   const version = cliBuildVersion(root, tag);
   const dist = path.join(root, 'dist');
   if (json(path.join(dist, 'package.json')).version !== version) throw new Error('Build version does not match the release tag. Build with MCODE_RELEASE_TAG first.');
   const revision = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
-  if (execFileSync('git', ['status', '--porcelain', '--untracked-files=no'], { cwd: root, encoding: 'utf8' }).trim()) throw new Error('Packaging requires a clean committed working tree.');
-  if (json(path.join(dist, 'package.json')).gitHead !== revision) throw new Error('Build revision does not match HEAD. Rebuild with MCODE_RELEASE_TAG.');
-  const temporary = mkdtempSync(path.join(tmpdir(), 'mcode-release-'));
+  if (requireClean && execFileSync('git', ['status', '--porcelain', '--untracked-files=no'], { cwd: root, encoding: 'utf8' }).trim()) throw new Error('Packaging requires a clean committed working tree.');
+  if (requireRevision && json(path.join(dist, 'package.json')).gitHead !== revision) throw new Error('Build revision does not match HEAD. Rebuild with MCODE_RELEASE_TAG.');
+  const temporary = mkdtempSync(path.join(parent, 'mcode-release-'));
+  const stage = path.join(temporary, 'package');
+  cpSync(dist, stage, { recursive: true, filter: file => path.basename(file) !== 'metafile.json' });
+  const manifest = releaseManifest(readExtraction(root).packageRoots.map(directory => path.join(root, directory)), version);
+  writeFileSync(path.join(stage, 'package.json'), JSON.stringify(manifest, null, 2) + '\n');
+  copyLicenses(stage);
+  writeFileSync(path.join(stage, 'release.json'), JSON.stringify({ version, tag, revision, buildNode: process.version }, null, 2) + '\n');
+  return { stage, temporary, version, revision, manifest };
+}
+
+export async function packageCliRelease({ tag, out }) {
+  const { stage, temporary, version, revision } = stageCliRelease({ tag });
   try {
-    const stage = path.join(temporary, 'package');
-    cpSync(dist, stage, { recursive: true, filter: file => path.basename(file) !== 'metafile.json' });
-    const manifest = releaseManifest(readExtraction(root).packageRoots.map(directory => path.join(root, directory)), version);
-    writeFileSync(path.join(stage, 'package.json'), JSON.stringify(manifest, null, 2) + '\n');
-    copyLicenses(stage);
-    writeFileSync(path.join(stage, 'release.json'), JSON.stringify({ version, tag, revision, buildNode: process.version }, null, 2) + '\n');
     writeFileSync(path.join(stage, 'README.md'), `# MiniMax Code ${version}
 
 Built from https://github.com/MiniMax-AI/minimax-code/tree/${revision}.

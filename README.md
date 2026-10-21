@@ -57,6 +57,14 @@ npm install -g @minimax-ai/code@latest --registry=https://registry.npmjs.org/ --
 
 The npm command uses the public registry, includes the optional SQLite dependency, and permits the package and SQLite installation scripts. See the [installation guide](docs/installation.md) for version pinning and Node.js compatibility.
 
+**Ubuntu / Debian** — a self-contained `.deb` built for your Node.js ABI installs `mcode` under `/usr/bin`:
+
+```bash
+sudo apt install ./minimax-code_<version>_<arch>.deb
+```
+
+The package depends on a compatible system Node.js and does not bundle one. See [install the Ubuntu/Debian package](docs/installation.md#install-the-ubuntudebian-package).
+
 Reopen your terminal and check the installation:
 
 ```bash

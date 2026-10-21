@@ -25,12 +25,14 @@ const { values } = parseArgs({
   },
 });
 const profile = values.profile;
-if (!["full", "platform", "windows", "docs", "archive", "package"].includes(profile))
+if (!["full", "platform", "windows", "docs", "archive", "package", "deb"].includes(profile))
   throw new Error(`Unknown verification profile: ${profile}`);
 if (profile === "windows" && process.platform !== "win32")
   throw new Error("Windows verification profile requires a Windows host");
 if (profile === 'package' && !['darwin', 'linux'].includes(process.platform))
   throw new Error('Package verification currently supports Linux and macOS only.');
+if (profile === 'deb' && process.platform !== 'linux')
+  throw new Error('Debian package verification requires Linux.');
 // Listing must not leave a temporary export directory behind.
 const temporary = values.list
   ? undefined
@@ -48,11 +50,12 @@ const steps = [
     command: ["scripts/export-source-preview.mjs", "--out", preview],
   },
   { name: "test:release-tools", script: "test:release-tools", docs: true, windows: true },
+  { name: "test:deb-tools", script: "test:deb-tools", docs: true, windows: true, debProfile: true },
   { name: "lint:tui", script: "lint:tui", windows: true },
   // Compiler inputs are identical across the matrix. One Linux job runs this;
   // all platforms still build and validate native artifacts on their own platform.
   { name: "typecheck", script: "typecheck", fullOnly: true },
-  { name: "build", script: "build", windows: true },
+  { name: "build", script: "build", windows: true, debProfile: true },
   { name: "check:standalone", script: "check:standalone", windows: true },
   { name: "test:artifact", script: "test:artifact", windows: true },
   { name: "test:capabilities", script: "test:capabilities" },
@@ -79,11 +82,14 @@ const steps = [
     packageOnly: true,
     platforms: ['darwin', 'linux'],
   },
+  { name: "verify:deb", script: "verify:deb", debOnly: true, debProfile: true, platforms: ["linux"] },
 ];
 
 function skipReason(step) {
   if (profile === 'package' && !step.packageOnly) return 'validating an npm release archive';
   if (profile !== 'package' && step.packageOnly) return 'requires an npm release archive';
+  if (profile === 'deb' && !step.debProfile) return 'building the Debian package';
+  if (profile !== 'deb' && step.debOnly) return 'requires the Debian package profile';
   if (profile === "windows" && !step.windows) return "not part of Windows contract";
   if (profile === "docs" && !step.docs) return "documentation-only change";
   if (profile === "archive" && step.requiresGit)
