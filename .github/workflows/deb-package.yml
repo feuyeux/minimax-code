@@ -1,0 +1,85 @@
+name: Debian package
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/deb-package.yml'
+      - 'docs/installation.md'
+      - 'docs/releasing.md'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'README.md'
+      - 'scripts/lib/deb-release.mjs'
+      - 'scripts/lib/cli-release.mjs'
+      - 'scripts/package-cli-release.mjs'
+      - 'scripts/package-deb.mjs'
+      - 'scripts/verify-deb.mjs'
+      - 'scripts/verify.mjs'
+      - 'test/deb-package.test.mjs'
+  pull_request:
+    paths:
+      - '.github/workflows/deb-package.yml'
+      - 'docs/installation.md'
+      - 'docs/releasing.md'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'README.md'
+      - 'scripts/lib/deb-release.mjs'
+      - 'scripts/lib/cli-release.mjs'
+      - 'scripts/package-cli-release.mjs'
+      - 'scripts/package-deb.mjs'
+      - 'scripts/verify-deb.mjs'
+      - 'scripts/verify.mjs'
+      - 'test/deb-package.test.mjs'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: deb-package-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  deb:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: 9.12.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Builds the package and validates layout, metadata, launcher, SQLite
+      # binding and ripgrep against the packaged tree.
+      - run: pnpm verify --profile deb
+        env:
+          MCODE_VERIFY_REPORT_DIR: ${{ runner.temp }}/verification
+      - name: Install the package into a temporary dpkg root
+        shell: bash
+        run: |
+          set -euo pipefail
+          deb="$(ls "$GITHUB_WORKSPACE"/dist/deb/minimax-code_*.deb)"
+          root="$RUNNER_TEMP/dpkg-root"
+          mkdir -p "$root/var/lib/dpkg/info" "$root/var/lib/dpkg/updates"
+          : > "$root/var/lib/dpkg/status"
+          dpkg --root="$root" --force-not-root --force-depends --force-script-chrootless -i "$deb"
+          "$root/usr/bin/mcode" --version
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: debian-package
+          path: |
+            dist/deb/*.deb
+            dist/deb/*.sha256
+          retention-days: 14
+          if-no-files-found: error
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: ${{ always() }}
+        with:
+          name: debian-verification
+          path: ${{ runner.temp }}/verification/
+          retention-days: 14
+          if-no-files-found: warn

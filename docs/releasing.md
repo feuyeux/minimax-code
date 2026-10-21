@@ -68,6 +68,29 @@ dependencies, including native dependencies, for the user's platform. It does no
 include Node.js and is not an offline bundle. See [installation](installation.md#install-a-github-release-archive).
 This workflow does not publish to the npm registry or change the official installer.
 
+## Debian and Ubuntu packages
+
+A Debian package can be built from the same compiled `dist` directory. It is a
+self-contained application tree under `/usr/lib/minimax-code` plus a `/usr/bin/mcode`
+symlink, and it depends on a compatible system Node.js runtime instead of bundling
+one. Native modules make the package ABI- and architecture-specific, so it is
+built for the packaging host rather than cross-built.
+
+```bash
+pnpm install --frozen-lockfile
+pnpm build
+pnpm verify --profile deb
+```
+
+`pnpm package:deb` writes `dist/deb/minimax-code_<version>-1_<arch>.deb` and its
+`.sha256` checksum. It stages the same compiled CLI, dependency manifest, licenses
+and `release.json` receipt as the npm archive, then installs the exact runtime
+dependency versions into the package. A clean committed tree is required unless
+`--allow-dirty` is passed. `pnpm verify:deb` rebuilds the package and checks the
+archive layout, control metadata, launcher, SQLite binding and ripgrep binary.
+The separate `Debian package` workflow runs that profile on pull requests that
+touch packaging code.
+
 ## Source previews
 
 The current source target is MiniMax Code 0.6.3. Workspace and local-build manifests remain `private: true` to prevent accidental npm publication. A source release, npm package, and installer are separate artifacts with separate verification.
